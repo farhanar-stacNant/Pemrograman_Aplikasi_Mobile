@@ -12,7 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 189, 39, 235)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 103, 41, 122),
+        ),
       ),
       home: const MyHomePage(title: 'Moh Farhan Ali 24102016'),
     );
@@ -29,21 +31,31 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 5; // Nilai awal
+  String _pesanError =
+      ''; // Variabel untuk menampung teks peringatan di bawah angka
 
-  // Fungsi untuk MENAMBAH angka (Maksimal 10)
-  void _incrementCounter() {
-    setState(() {
-      if (_counter < 10) {
-        _counter++;
-      }
-    });
-  }
-
-  // 1. TAMBAHAN BARU: Fungsi untuk MENGURANGI angka (Minimal 0)
+  // Fungsi untuk mengurangi angka
   void _decrementCounter() {
     setState(() {
       if (_counter > 0) {
         _counter--;
+        _pesanError = ''; // Bersihkan pesan jika normal
+      } else {
+        // Pesan muncul di bawah angka
+        _pesanError = 'Anda mencapai\nAkar semua masalah di Aritmatika :)';
+      }
+    });
+  }
+
+  // Fungsi untuk menambah angka
+  void _incrementCounter() {
+    setState(() {
+      if (_counter < 10) {
+        _counter++;
+        _pesanError = ''; // Bersihkan pesan jika normal
+      } else {
+        // Pesan muncul di bawah angka
+        _pesanError = 'Mentok nih woi,\nTekan aja gak ngaruh! :v';
       }
     });
   }
@@ -59,10 +71,26 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Hasil hitung mundur: '),
+            Text(
+              'Coba Tekan Tombol\napakah yang terjadi',
+              style: TextStyle(fontSize: 25),
+              textAlign: TextAlign.center,
+            ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(
+              height: 20,
+            ), // Jarak antara angka dan pesan peringatan
+            Text(
+              // Teks Posisinya Tepat di Bawah Angka
+              _pesanError,
+              style: const TextStyle(
+                color: Colors.red, // Diberi warna merah agar seperti peringatan
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -70,16 +98,22 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          // Tombol Kurang (-) -> Akan mati (null) jika angka sudah 0
+          // Tombol Kurang (-)
           FloatingActionButton(
-            onPressed: _counter > 0 ? _decrementCounter : null, 
+            onPressed: _decrementCounter,
+            backgroundColor: _counter == 0
+                ? const Color.fromARGB(255, 255, 255, 255).withValues(alpha: 0.4)
+                : null,
             tooltip: 'Decrement',
             child: const Icon(Icons.remove),
           ),
           const SizedBox(width: 10),
-          // Tombol Tambah (+) -> Akan mati (null) jika angka sudah 10
+          // Tombol Tambah (+)
           FloatingActionButton(
-            onPressed: _counter < 10 ? _incrementCounter : null, 
+            onPressed: _incrementCounter,
+            backgroundColor: _counter == 10
+                ? const Color.fromARGB(255, 255, 255, 255).withValues(alpha: 0.4)
+                : null,
             tooltip: 'Increment',
             child: const Icon(Icons.add),
           ),
